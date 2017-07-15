@@ -20,7 +20,7 @@ articleView.populateFilters = function() {
     }
   });
 };
-
+//testing
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
     if ($(this).val()) {

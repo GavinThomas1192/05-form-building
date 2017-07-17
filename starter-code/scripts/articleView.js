@@ -91,7 +91,7 @@ $('#article-json').on('focus', function() {
 });
 
 // TODO: Add an event handler to update the preview and the article-export field if any inputs change.
-articleView.showPreview = function (event) {
+articleView.showPreview = function(event) {
   event.preventDefault();
   $('#entryPreview').empty();
   // do stuff
@@ -110,13 +110,13 @@ articleView.showPreview = function (event) {
 articleView.create = function() {
   // TODO: Set up a var to hold the new article we are creating.
   // Clear out the #articles element, so we can put in the updated preview
-
+  var template = $('#entryTemplate').html();
 
   // TODO: Instantiate an article based on what's in the form fields:
-
+  var compiled = Handlebars.compile(template);
 
   // TODO: Use our interface to the Handblebars template to put the article preview into the DOM:
-
+  $('#articles').append(compiled(this));
 
   // TODO: The new articles we create will be shown as JSON in an element in our article-export section. From there, we can copy/paste the JSON into our source data file.
   // Set up this "export" functionality. When data is inputted into the form, that data should be converted to stringified JSON. Then, display that JSON in the element inside the article-export section. The article-export section was hidden on page load; make sure to show it as soon as data is entered in the form.

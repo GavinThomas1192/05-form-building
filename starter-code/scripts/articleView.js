@@ -66,7 +66,7 @@ articleView.setTeasers = function() {
     } else {
       $('body').animate({
         scrollTop: ($(this).parent().offset().top)
-      },200);
+      }, 200);
       $(this).html('Read on &rarr;');
       $(this).parent().find('.article-body *:nth-of-type(n+2)').hide();
     }
@@ -74,24 +74,36 @@ articleView.setTeasers = function() {
 };
 
 articleView.initNewArticlePage = function() {
- // TODO: Make the tabs work. Right now, you're seeing all the tab content (items with a class of tab-content) on the page at once. The section with the id of "write" should show when the "write" tab is clicked; it is also the default and should be shown on page load. The section with the id of "articles" should show when the "preview" tab is clicked.
- $('.main-nav').on('click', '.tab', function() {
-   $('.tab-content').hide();
-   $('#' + $(this).data('content')).fadeIn();
- });
-
- $('.main-nav .tab:first').click();
-};
-
-  // TODO: Hide the article-export section on page load
-
-  $('#article-json').on('focus', function(){
-    this.select();
+  // TODO: Make the tabs work. Right now, you're seeing all the tab content (items with a class of tab-content) on the page at once. The section with the id of "write" should show when the "write" tab is clicked; it is also the default and should be shown on page load. The section with the id of "articles" should show when the "preview" tab is clicked.
+  $('.main-nav').on('click', '.tab', function() {
+    $('.tab-content').hide();
+    $('#' + $(this).data('content')).fadeIn();
   });
 
-  // TODO: Add an event handler to update the preview and the article-export field if any inputs change.
-
+  $('.main-nav .tab:first').click();
 };
+
+// TODO: Hide the article-export section on page load
+
+$('#article-json').on('focus', function() {
+  this.select();
+});
+
+// TODO: Add an event handler to update the preview and the article-export field if any inputs change.
+articleView.showPreview = function (event) {
+  event.preventDefault();
+  $('#entryPreview').empty();
+  // do stuff
+  // retrieve the data from the form
+  articleView.newEntry.title = $('#entryTitle').val();
+  articleView.newEntry.date = (new Date()).toDateString();
+  articleView.newEntry.category = $('#entryCategory').val();
+  articleView.newEntry.mood = $('#entryMood').val();
+  articleView.newEntry.text = $('#entryText').val();
+  articleView.newEntry.author = $('#entryAuthor').val();
+  articleView.newEntry.templateAndDomify('#entryPreview');
+};
+
 
 // this is the function that generates the preview and shows the export field
 articleView.create = function() {
@@ -106,7 +118,7 @@ articleView.create = function() {
 
 
   // TODO: The new articles we create will be shown as JSON in an element in our article-export section. From there, we can copy/paste the JSON into our source data file.
-    // Set up this "export" functionality. When data is inputted into the form, that data should be converted to stringified JSON. Then, display that JSON in the element inside the article-export section. The article-export section was hidden on page load; make sure to show it as soon as data is entered in the form.
+  // Set up this "export" functionality. When data is inputted into the form, that data should be converted to stringified JSON. Then, display that JSON in the element inside the article-export section. The article-export section was hidden on page load; make sure to show it as soon as data is entered in the form.
 
 };
 

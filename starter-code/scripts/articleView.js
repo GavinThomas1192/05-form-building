@@ -91,7 +91,7 @@ $('#article-json').on('focus', function() {
 });
 
 // TODO: Add an event handler to update the preview and the article-export field if any inputs change.
-articleView.showPreview = function(event) {
+articleView.showPreview = function() {
   // event.preventDefault();
   $('#article-export').empty();
   // do stuff
@@ -106,7 +106,9 @@ articleView.showPreview = function(event) {
   });
 
   console.log(existingArticle);
-  return existingArticle;
+  tempRay.push(existingArticle);
+  console.log(tempRay);
+  // return existingArticle;
 
   // articleView.newEntry.title = $('#entryTitle').val();
   // articleView.newEntry.date = (new Date()).toDateString();
@@ -136,8 +138,15 @@ articleView.create = function() {
 };
 
 $('#save').on('click', function() {
-  tempRay.push(articleView.showPreview());
-  $('#article-export').append(tempRay)
+  articleView.showPreview();
+  // $('#article-export').append(tempRay)
+
+  tempRay.forEach(function(article){
+    $('#article-export').append(article.toHtml())
+    $('#article-export').show();
+  });
+
+
 })
 
 

@@ -78,14 +78,13 @@ articleView.initNewArticlePage = function() {
   $('.main-nav').on('click', '.tab', function() {
     $('.tab-content').hide();
     $('#' + $(this).data('content')).fadeIn();
-    console.log($('#' + $(this).data('content')));
   });
 
   $('.main-nav .tab:first').click();
 };
 
 // TODO: Hide the article-export section on page load
-
+$('#article-export').hide();
 $('#article-json').on('focus', function() {
   this.select();
 });
@@ -93,16 +92,16 @@ $('#article-json').on('focus', function() {
 // TODO: Add an event handler to update the preview and the article-export field if any inputs change.
 articleView.showPreview = function(event) {
   event.preventDefault();
-  $('#entryPreview').empty();
+  $('#article-export').empty();
   // do stuff
   // retrieve the data from the form
   articleView.newEntry.title = $('#entryTitle').val();
   articleView.newEntry.date = (new Date()).toDateString();
   articleView.newEntry.category = $('#entryCategory').val();
-  articleView.newEntry.mood = $('#entryMood').val();
+  articleView.newEntry.mood = $('#entryAuthorURL').val();
   articleView.newEntry.text = $('#entryText').val();
   articleView.newEntry.author = $('#entryAuthor').val();
-  articleView.newEntry.templateAndDomify('#entryPreview');
+  articleView.newEntry.templateAndDomify('#article-export');
 };
 
 
@@ -130,4 +129,5 @@ articleView.initIndexPage = function() {
   articleView.handleAuthorFilter();
   articleView.handleMainNav();
   articleView.setTeasers();
+  articleView.showPreview();
 };

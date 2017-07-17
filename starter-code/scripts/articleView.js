@@ -78,6 +78,7 @@ articleView.initNewArticlePage = function() {
   $('.main-nav').on('click', '.tab', function() {
     $('.tab-content').hide();
     $('#' + $(this).data('content')).fadeIn();
+    console.log($('#' + $(this).data('content')));
   });
 
   $('.main-nav .tab:first').click();

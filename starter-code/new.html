@@ -13,6 +13,12 @@
   <!-- NOTE (stretch goal): To fully incorporate the highlighting library "hljs" we need to fill the empty link tag below to refer to a CSS file that will handle our text highlighting -->
   <link>
   <!-- TODO: We want our new article form to be able to display a preview of the article that is being entered. Thus, we need code here that will recreate the same structure of our other articles. What do you think we need to add here? -->
+  <script type="text/x-handlebars-template" id="entryTemplate">
+    <h2>{{title}}</h2>
+    <h3>Written on {{publishedOn}} by {{author}}.</h3>
+    <h4>Author Category: {{category}} | Mood: {{mood}}</h4>
+    <p>{{body}}</p>
+  </script>
 </head>
 
 <body>
@@ -60,11 +66,11 @@
          </label>
         <label>
            Author Category
-           <input type="text" id="entryAuthorCategory" placeholder="Author Category">
+           <input type="text" id="entrycategory" placeholder="Author Category">
          </label>
         <label>
            Body
-           <textarea rows="10"  id="entryBody"  placeholder="Text"></textarea>
+           <textarea rows="10"  id="entryBody"  placeholder="Body"></textarea>
          </label>
         <submit id="save">Save Entry</submit>
         <!-- </fieldset> -->

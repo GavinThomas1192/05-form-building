@@ -1,6 +1,7 @@
 'use strict';
 
 var articleView = {};
+var tempRay = [];
 
 articleView.populateFilters = function() {
   $('article').each(function() {
@@ -74,7 +75,7 @@ articleView.setTeasers = function() {
 };
 
 articleView.initNewArticlePage = function() {
-  // TODO: Make the tabs work. Right now, you're seeing all the tab content (items with a class of tab-content) on the page at once. The section with the id of "write" should show when the "write" tab is clicked; it is also the default and should be shown on page load. The section with the id of "articles" should show when the "preview" tab is clicked.
+  // DONE: Make the tabs work. Right now, you're seeing all the tab content (items with a class of tab-content) on the page at once. The section with the id of "write" should show when the "write" tab is clicked; it is also the default and should be shown on page load. The section with the id of "articles" should show when the "preview" tab is clicked.
   $('.main-nav').on('click', '.tab', function() {
     $('.tab-content').hide();
     $('#' + $(this).data('content')).fadeIn();
@@ -83,7 +84,7 @@ articleView.initNewArticlePage = function() {
   $('.main-nav .tab:first').click();
 };
 
-// TODO: Hide the article-export section on page load
+// TODONE: Hide the article-export section on page load
 $('#article-export').hide();
 $('#article-json').on('focus', function() {
   this.select();
@@ -91,17 +92,29 @@ $('#article-json').on('focus', function() {
 
 // TODO: Add an event handler to update the preview and the article-export field if any inputs change.
 articleView.showPreview = function(event) {
-  event.preventDefault();
+  // event.preventDefault();
   $('#article-export').empty();
   // do stuff
   // retrieve the data from the form
-  articleView.newEntry.title = $('#entryTitle').val();
-  articleView.newEntry.date = (new Date()).toDateString();
-  articleView.newEntry.category = $('#entryCategory').val();
-  articleView.newEntry.mood = $('#entryAuthorURL').val();
-  articleView.newEntry.text = $('#entryText').val();
-  articleView.newEntry.author = $('#entryAuthor').val();
-  articleView.newEntry.templateAndDomify('#article-export');
+  var existingArticle = new Article({
+    title: $('#entryTitle').val(),
+    category: $('#entryCategory').val(),
+    author: $('#entryAuthor').val(),
+    authorUrl: $('#entryAuthorURL').val(),
+    date: (new Date()).toDateString(),
+    body: $('#article-body').val(),
+  });
+
+  console.log(existingArticle);
+  return existingArticle;
+
+  // articleView.newEntry.title = $('#entryTitle').val();
+  // articleView.newEntry.date = (new Date()).toDateString();
+  // articleView.newEntry.category = $('#entryCategory').val();
+  // articleView.newEntry.mood = $('#entryAuthorURL').val();
+  // articleView.newEntry.text = $('#entryText').val();
+  // articleView.newEntry.author = $('#entryAuthor').val();
+  // articleView.newEntry.templateAndDomify('#article-export');
 };
 
 
@@ -109,7 +122,7 @@ articleView.showPreview = function(event) {
 articleView.create = function() {
   // TODO: Set up a var to hold the new article we are creating.
   // Clear out the #articles element, so we can put in the updated preview
-  var template = $('#entryTemplate').html();
+  var template = $('#articleTemplate').html();
 
   // TODO: Instantiate an article based on what's in the form fields:
   var compiled = Handlebars.compile(template);
@@ -122,6 +135,11 @@ articleView.create = function() {
 
 };
 
+$('#save').on('click', function() {
+  tempRay.push(articleView.showPreview());
+  $('#article-export').append(tempRay)
+})
+
 
 articleView.initIndexPage = function() {
   articleView.populateFilters();
@@ -130,4 +148,5 @@ articleView.initIndexPage = function() {
   articleView.handleMainNav();
   articleView.setTeasers();
   articleView.showPreview();
+  articleView.create();
 };

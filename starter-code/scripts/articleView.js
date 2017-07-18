@@ -1,13 +1,12 @@
 'use strict';
 
-var articleView = {};
-var tempRay = [];
+const articleView = {};
 
 articleView.populateFilters = function() {
   $('article').each(function() {
     if (!$(this).hasClass('template')) {
-      var val = $(this).find('address a').text();
-      var optionTag = `<option value="${val}">${val}</option>`;
+      let val = $(this).find('address a').text();
+      let optionTag = `<option value="${val}">${val}</option>`;
 
       if ($(`#author-filter option[value="${val}"]`).length === 0) {
         $('#author-filter').append(optionTag);
@@ -21,7 +20,7 @@ articleView.populateFilters = function() {
     }
   });
 };
-//testing
+
 articleView.handleAuthorFilter = function() {
   $('#author-filter').on('change', function() {
     if ($(this).val()) {
@@ -51,7 +50,7 @@ articleView.handleCategoryFilter = function() {
 articleView.handleMainNav = function() {
   $('.main-nav').on('click', '.tab', function() {
     $('.tab-content').hide();
-    $('#' + $(this).data('content')).fadeIn();
+    $(`#${$(this).data('content')}`).fadeIn();
   });
 
   $('.main-nav .tab:first').click();
@@ -67,7 +66,7 @@ articleView.setTeasers = function() {
     } else {
       $('body').animate({
         scrollTop: ($(this).parent().offset().top)
-      }, 200);
+      },200);
       $(this).html('Read on &rarr;');
       $(this).parent().find('.article-body *:nth-of-type(n+2)').hide();
     }
@@ -75,92 +74,46 @@ articleView.setTeasers = function() {
 };
 
 articleView.initNewArticlePage = function() {
-  // DONE: Make the tabs work. Right now, you're seeing all the tab content (items with a class of tab-content) on the page at once. The section with the id of "write" should show when the "write" tab is clicked; it is also the default and should be shown on page load. The section with the id of "articles" should show when the "preview" tab is clicked.
-  $('.main-nav').on('click', '.tab', function() {
-    $('.tab-content').hide();
-    $('#' + $(this).data('content')).fadeIn();
+  $('.tab-content').show();
+  $('#export-field').hide();
+  $('#article-json').on('focus', function(){
+    this.select();
   });
 
-  $('.main-nav .tab:first').click();
+  $('#new-form').on('change', 'input, textarea', articleView.create);
 };
 
-// TODONE: Hide the article-export section on page load
-$('#article-export').hide();
-$('#article-json').on('focus', function() {
-  this.select();
-});
-
-// TODO: Add an event handler to update the preview and the article-export field if any inputs change.
-articleView.showPreview = function() {
-  $('#article-export').empty();
-
-  var existingArticle = new Article({
-    title: $('#entryTitle').val(),
-    category: $('#entryCategory').val(),
-    author: $('#entryAuthor').val(),
-    authorUrl: $('#entryAuthorURL').val(),
-    date: (new Date()).toDateString(),
-    body: $('#entryBody').val(),
-  });
-
-  console.log(existingArticle);
-  tempRay.push(existingArticle);
-  console.log(tempRay);
-  // return existingArticle;
-
-  // articleView.newEntry.title = $('#entryTitle').val();
-  // articleView.newEntry.date = (new Date()).toDateString();
-  // articleView.newEntry.category = $('#entryCategory').val();
-  // articleView.newEntry.mood = $('#entryAuthorURL').val();
-  // articleView.newEntry.text = $('#entryText').val();
-  // articleView.newEntry.author = $('#entryAuthor').val();
-  // articleView.newEntry.templateAndDomify('#article-export');
-};
-
-
-// this is the function that generates the preview and shows the export field
 articleView.create = function() {
-  // TODO: Set up a var to hold the new article we are creating.
-  // Clear out the #articles element, so we can put in the updated preview
-  var template = $('#articleTemplate').html();
+  let article;
+  $('#articles').empty();
 
-  // TODO: Instantiate an article based on what's in the form fields:
-  var compiled = Handlebars.compile(template);
-
-  // TODO: Use our interface to the Handblebars template to put the article preview into the DOM:
-  $('#articles').append(compiled(this));
-
-  // TODO: The new articles we create will be shown as JSON in an element in our article-export section. From there, we can copy/paste the JSON into our source data file.
-  // Set up this "export" functionality. When data is inputted into the form, that data should be converted to stringified JSON. Then, display that JSON in the element inside the article-export section. The article-export section was hidden on page load; make sure to show it as soon as data is entered in the form.
-
-  var x = JSON.stringify(tempRay);
-  console.log(x);
-  var y = JSON.parse(x);
-  console.log(y);
-
-
-};
-
-$('#save').on('click', function() {
-  event.preventDefault();
-  articleView.showPreview();
-  // $('#article-export').append(tempRay)
-
-  tempRay.forEach(function(article){
-    $('#article-export').append(article.toHtml())
-    $('#article-export').show();
+  article = new Article({
+    title: $('#article-title').val(),
+    author: $('#article-author').val(),
+    authorUrl: $('#article-author-url').val(),
+    category: $('#article-category').val(),
+    body: $('#article-body').val(),
+    publishedOn: $('#article-published:checked').length ? new Date() : null
   });
 
+  $('#articles').append(article.toHtml());
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
 
-})
+  $('#export-field').show();
+  $('#article-json').val(`${JSON.stringify(article)},`);
+};
 
 
 articleView.initIndexPage = function() {
+  Article.all.forEach(function(article) {
+    $('#articles').append(article.toHtml())
+  });
+
   articleView.populateFilters();
   articleView.handleCategoryFilter();
   articleView.handleAuthorFilter();
   articleView.handleMainNav();
   articleView.setTeasers();
-  articleView.showPreview();
-  articleView.create();
 };
